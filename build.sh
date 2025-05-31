@@ -30,7 +30,7 @@ if [ ! -z "$old_image_id" ] && [ "$image_id" != "$old_image_id" ]; then
 fi
 
 # Run your container using the image ID
-echo "Running container redis-cluster with image ID: $image_id..."
+echo "Running container redis6c with image ID: $image_id..."
 podman run -d --name redis6c \
   -e REDIS_PASSWORD="${REDIS_PASSWORD}" \
   -p 30001-30006:30001-30006 \

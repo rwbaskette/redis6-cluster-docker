@@ -26,7 +26,7 @@ then
     while [ $((PORT < ENDPORT)) != "0" ]; do
         PORT=$((PORT+1))
         echo "Starting $PORT"
-        $BIN_PATH/redis-server --port $PORT  --protected-mode $PROTECTED_MODE --cluster-enabled yes --cluster-config-file nodes-${PORT}.conf --cluster-node-timeout $TIMEOUT --appendonly yes --appendfilename appendonly-${PORT}.aof --dbfilename dump-${PORT}.rdb --logfile ${PORT}.log --daemonize yes ${ADDITIONAL_OPTIONS}
+        $BIN_PATH/redis-server --port $PORT  --protected-mode $PROTECTED_MODE --cluster-enabled yes --cluster-config-file nodes-${PORT}.conf --cluster-node-timeout $TIMEOUT --appendonly yes --appendfilename appendonly-${PORT}.aof --dbfilename dump-${PORT}.rdb --logfile ${PORT}.log --daemonize yes --requirepass "$REDIS_PASSWORD" ${ADDITIONAL_OPTIONS}
     done
     exit 0
 fi
@@ -42,7 +42,7 @@ then
     if [ "$2" == "-f" ]; then
         OPT_ARG="--cluster-yes"
     fi
-    $BIN_PATH/redis-cli --cluster create $HOSTS --cluster-replicas $REPLICAS $OPT_ARG
+    $BIN_PATH/redis-cli --cluster create $HOSTS --cluster-replicas $REPLICAS -a "$REDIS_PASSWORD" $OPT_ARG
     exit 0
 fi
 
@@ -51,7 +51,7 @@ then
     while [ $((PORT < ENDPORT)) != "0" ]; do
         PORT=$((PORT+1))
         echo "Stopping $PORT"
-        $BIN_PATH/redis-cli -p $PORT shutdown nosave
+        $BIN_PATH/redis-cli -p $PORT  -a "$REDIS_PASSWORD" shutdown nosave
     done
     exit 0
 fi
@@ -62,7 +62,7 @@ then
     while [ 1 ]; do
         clear
         date
-        $BIN_PATH/redis-cli -p $PORT cluster nodes | head -30
+        $BIN_PATH/redis-cli -p $PORT -a "$REDIS_PASSWORD" cluster nodes | head -30
         sleep 1
     done
     exit 0
@@ -86,7 +86,7 @@ if [ "$1" == "call" ]
 then
     while [ $((PORT < ENDPORT)) != "0" ]; do
         PORT=$((PORT+1))
-        $BIN_PATH/redis-cli -p $PORT $2 $3 $4 $5 $6 $7 $8 $9
+        $BIN_PATH/redis-cli -p $PORT -a "$REDIS_PASSWORD" $2 $3 $4 $5 $6 $7 $8 $9
     done
     exit 0
 fi

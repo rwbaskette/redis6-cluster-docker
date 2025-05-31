@@ -16,7 +16,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     gcc \
     curl \
-    libc6
+    libc6 \
+    gettext-base \
+    procps \
+    psmisc
 
 # Set working directory
 WORKDIR /app
@@ -26,14 +29,17 @@ RUN curl -L https://download.redis.io/releases/redis-6.2.17.tar.gz | tar xz
 
 # Build Redis
 WORKDIR /app/redis-6.2.17
-RUN make -j 5
+RUN make -j 4
 
 # Install Redis (copy binaries to /usr/local/bin)
 RUN make install
 
 # Clean up build files
 WORKDIR /app
-RUN rm -rf /app/redis-6.2.17
+
+# Copy startup scripts
+COPY redis-cli.sh .
+RUN chmod +x redis-cli.sh
 
 # Copy startup scripts
 COPY create-cluster.sh .
@@ -45,3 +51,6 @@ RUN chmod +x start.sh
 # Entrypoint to run the startup script
 ENTRYPOINT ["./start.sh"]
 
+# ... for debugging
+# ENTRYPOINT ["bash"]
+# CMD ["-c", "while true; do echo 'Running...'; sleep 10; done"]
