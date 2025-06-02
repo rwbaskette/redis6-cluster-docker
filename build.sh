@@ -33,7 +33,7 @@ fi
 echo "Running container redis6c with image ID: $image_id..."
 podman run -d --name redis6c \
   -e REDIS_PASSWORD="${REDIS_PASSWORD}" \
-  -p 30001-30006:30001-30006 \
+  -p 6001-6006:6001-6006 \
   "$image_id"
 
 if [ $? -ne 0 ]; then

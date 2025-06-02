@@ -1,3 +1,3 @@
 #!/bin/bash
 
-redis-cli -c -p 30001,30002,30003,30004,30005,30006 -a "$REDIS_PASSWORD"
+redis-cli -c -p 6001,6002,6003,6004,6005,6006 -a "$REDIS_PASSWORD"

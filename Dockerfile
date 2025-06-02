@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV REDIS_PASSWORD=
 
 # Expose Redis ports
-EXPOSE 30001 30002 30003 30004 30005 30006
+EXPOSE 6001 6002 6003 6004 6005 6006
 
 # Install dependencies needed for building Redis
 RUN apt-get update && apt-get install -y --no-install-recommends \
