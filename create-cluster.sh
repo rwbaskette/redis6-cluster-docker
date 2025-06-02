@@ -26,7 +26,7 @@ then
     while [ $((PORT < ENDPORT)) != "0" ]; do
         PORT=$((PORT+1))
         echo "Starting $PORT"
-        $BIN_PATH/redis-server --port $PORT  --protected-mode $PROTECTED_MODE --cluster-enabled yes --cluster-config-file nodes-${PORT}.conf --cluster-node-timeout $TIMEOUT --appendonly yes --appendfilename appendonly-${PORT}.aof --dbfilename dump-${PORT}.rdb --logfile ${PORT}.log --daemonize yes --requirepass "$REDIS_PASSWORD" ${ADDITIONAL_OPTIONS}
+        $BIN_PATH/redis-server --port $PORT  --protected-mode $PROTECTED_MODE --cluster-enabled yes --cluster-config-file nodes-${PORT}.conf --cluster-node-timeout $TIMEOUT --appendonly yes --appendfilename appendonly-${PORT}.aof --dbfilename dump-${PORT}.rdb --logfile ${PORT}.log --daemonize yes --masterauth "$REDIS_PASSWORD" --requirepass "$REDIS_PASSWORD" ${ADDITIONAL_OPTIONS}
     done
     exit 0
 fi
@@ -51,7 +51,7 @@ then
     while [ $((PORT < ENDPORT)) != "0" ]; do
         PORT=$((PORT+1))
         echo "Stopping $PORT"
-        $BIN_PATH/redis-cli -p $PORT  -a "$REDIS_PASSWORD" shutdown nosave
+        $BIN_PATH/redis-cli -p $PORT -a "$REDIS_PASSWORD" shutdown nosave
     done
     exit 0
 fi
