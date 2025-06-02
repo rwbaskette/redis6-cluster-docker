@@ -2,9 +2,18 @@
 
 # Main script execution
 
-./create-cluster.sh start
+if ! [ -d "./cluster-data" ]; then
+  mkdir ./cluster-data
+fi
 
-./create-cluster.sh create -f
+pushd ./cluster-data
+
+/app/create-cluster.sh start
+
+if ! [ -e ".create-cluster-flag" ]; then
+  /app/create-cluster.sh create -f
+  touch .create-cluster-flag
+fi
 
 # Initialize a variable to control the loop
 continue_loop=1
@@ -13,7 +22,7 @@ continue_loop=1
 handle_signal() {
   echo "Signal received!"
   continue_loop=0 # Set the variable to exit the loop
-  ./create-cluster.sh stop
+  /app/create-cluster.sh stop
 }
 
 # Trap the SIGUSR1 signal and call the handler function
@@ -23,5 +32,7 @@ trap handle_signal SIGUSR1 SIGINT
 while [ $continue_loop -eq 1 ]; do
   sleep 1
 done
+
+popd
 
 echo done
