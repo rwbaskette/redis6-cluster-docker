@@ -42,4 +42,4 @@ if [ $? -ne 0 ]; then
 fi
 
 # Remove unused images after work is done (optional)
-trap 'podman image prune -af' EXIT
+trap 'echo DONE' EXIT
